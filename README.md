@@ -1,7 +1,7 @@
 # SampleDatabaseFiles
 Updated SQL Server 2000 Sample Database Files
 
-Introduction
+##Introduction
 
 The Microsoft® SQL Server™ 2000 Sample Database Files include:
 
