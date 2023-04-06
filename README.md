@@ -24,7 +24,7 @@ Note: If the instance of SQL Server 2000 was installed with a case-sensitive col
 
 
 
-Sample Files Prerequisites
+## Sample Files Prerequisites
 The user attaching the pre-built database files must be a member of the SQL Server sysadmin or dbcreator fixed server roles.
 
 The user running the SQL Server 2000 Sample Database Scripts must be a member of the SQL Server sysadmin or dbcreator fixed server roles, or have been granted CREATE DATABASE permissions.
@@ -36,7 +36,7 @@ The files can be used with the following versions of SQL Server 2000:
 
 
 
-Installing the Sample Databases
+## Installing the Sample Databases
 To install the sample databases
 1. Either run a script to build a sample database, or attach the pre-built database files for that database.
 2. To grant another person access to the sample database, you must grant permissions on the database objects to that person.
@@ -72,7 +72,7 @@ Note: Enter the osql commands on one line in the command prompt window. These ex
 
 
 
-Running the Scripts Using SQL Query Analyzer
+## Running the Scripts Using SQL Query Analyzer
 To run the scripts using SQL Query Analyzer:
 1. From the Start menu, point to All Programs, point to Microsoft SQL Server, and then click the Query Analyzer icon.
 2. Connect to the instance of SQL Server 2000 on which you want to create the sample database.
@@ -81,7 +81,7 @@ To run the scripts using SQL Query Analyzer:
 
 
 
-Running the Scripts Using osql
+## Running the Scripts Using osql
 To run the scripts using osql:
 1. Open a command prompt window.
 2. From the command prompt, use the cd command to navigate to the folder containing the SQL Server 2000 Sample Database Scripts:
@@ -96,7 +96,7 @@ To run the scripts using osql:
 
 
 
-Assigning Permissions
+## Assigning Permissions
 The logon you use when creating or attaching a database becomes the owner of the sample database, and of all the objects within the database. That login and any login in the sysadmin fixed server role will have permission to access the data and objects in the sample database. All other logins must be granted permissions before they can access the sample data and objects.
 
 Granting a Login Access to a Database
@@ -122,7 +122,7 @@ For more information about granting logins access to a database, see the followi
 
 
 
-Granting User Accounts Permissions
+## Granting User Accounts Permissions
 Once a login has been associated with a user account in the sample database, you must grant that user account permissions to access database objects. Only a database user that is a member of at least one of the following roles can grant access to database objects: the sysadmin fixed server role, the db_accessadmin fixed database role, or the db_owner fixed database role.
 
 To grant account permissions using Enterprise Manager
