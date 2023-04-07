@@ -7,7 +7,7 @@ The Microsoft® SQL Server™ 2000 Sample Database Files include:
 
 · New versions of two scripts included with SQL Server 2000:
   - Instpubs.sql creates the pubs sample database.
-  -Instnwnd.sql creates the Northwind sample database.
+  - Instnwnd.sql creates the Northwind sample database.
 
 · Pre-built database files that can be attached to an instance of SQL Server 2000:
   - Pubs.mdf and pubs_log.ldf are the data and log files for the pubs sample database.
