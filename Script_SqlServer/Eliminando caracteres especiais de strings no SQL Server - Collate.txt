@@ -1,0 +1,91 @@
+Eliminando caracteres especiais de strings no SQL Server - Collate
+
+Veja neste artigo como a cláusula COLLATE pode simplificar tarefas de tratamento de texto no SQL Server. Considerando a execução de consultas a partir de um banco de dados criado com o SQL Server, costuma ser bastante comum que em determinadas situações campos do tipo texto precisem passar por um tratamento, de forma a eliminar do resultado obtido caracteres especiais como acentos, cedilha e outros símbolos oriundos de línguas estrangeiras.
+
+Considerando a execução de consultas a partir de um banco de dados criado com o SQL Server, costuma ser bastante comum que em determinadas situações campos do tipo texto precisem passar por um tratamento, de forma a eliminar do resultado obtido caracteres especiais como acentos, cedilha e outros símbolos oriundos de línguas estrangeiras.
+
+Tal demanda pode representar um pré-requisito em cenários envolvendo a geração de arquivos-texto nos quais constam informações de uma organização. As instituições bancárias ou órgãos governamentais responsáveis por requerer tais dados exigiriam, assim, que caracteres especiais fossem removidos, uma vez que os mesmos podem não ser compreendidos pelas aplicações que irão processá-los.
+
+O SQL Server oferece uma maneira bastante prática atender a este tipo de necessidade: trata-se do recurso conhecido COLLATE. A aplicação deste mecanismo se faz através do uso de uma cláusula de mesmo nome, a qual pode ser empregada em um conjunto com uma expressão, permitindo assim selecionar um conjunto de caracteres válidos para esta última (elemento este conhecido pelo nome de “collation”).
+
+Importante destacar o fato de que dentro do SQL Server existem diversos collations definidos por padrão, cada um dos quais representa normalmente um agrupamento de caracteres que é próprio de uma língua/alfabeto. Logo, a aplicação de um collation específico sobre uma sequência de caracteres contribui para que caracteres indesejados sejam eliminados, com os mesmos sendo substituídos por sinais equivalentes (com base em um conjunto de símbolos considerados válidos dentro de um determinado contexto).
+
+Executando uma consulta (Listagem 1) numa tabela hipotética que contenha dados de fornecedores, poderíamos ter como resultado algo que equivale às informações mostradas na Figura 1. Como é possível notar, existem caracteres especiais em valores associados aos campos RazaoSocial, Endereco e Cidade.
+
+Listagem 1: Consulta em que não se emprega a cláusula COLLATE
+
+SELECT IdFornecedor
+      ,RazaoSocial
+      ,Endereco
+      ,Cidade
+      ,Estado
+FROM TB_FORNECEDOR
+
+Figura 1: Execução de instrução SQL sem o uso de COLLATE
+
+A fim de demonstrar o uso do comando COLLATE, será apresentado um exemplo de função escalar que recebe uma sequência de texto como parâmetro e devolve a mesma com eliminando acentos, além de outros caracteres como “º” e “ª”. Na Listagem 2 encontra-se a implementação da função FN_FORMATAR_TEXTO, a qual pode ser empregada em expressões do tipo VARCHAR com o intuito de tratar as strings correspondentes.
+
+Listagem 2: Exemplo de função que emprega o mecanismo COLLATE
+
+
+CREATE FUNCTION [dbo].[FN_FORMATAR_TEXTO]
+(
+	@TEXTO VARCHAR(MAX)
+)
+RETURNS VARCHAR(MAX)
+AS
+BEGIN
+
+	DECLARE @TEXTO_FORMATADO VARCHAR(MAX)
+	
+	-- O trecho abaixo possibilita que caracteres como "º" ou "ª"
+	-- sejam convertidos para "o" ou "a", respectivamente
+	SET @TEXTO_FORMATADO = UPPER(@TEXTO)
+	    COLLATE sql_latin1_general_cp1250_ci_as
+
+	-- O trecho abaixo remove acentos e outros caracteres especiais,
+	-- substituindo os mesmos por letras normais
+	SET @TEXTO_FORMATADO = @TEXTO_FORMATADO
+	    COLLATE sql_latin1_general_cp1251_ci_as
+
+	RETURN @TEXTO_FORMATADO
+
+END
+GO
+Conforme pode ser observado, a função FN_FORMATAR_TEXTO faz uso de dois collations:
+
+* sql_latin1_general_cp1250_ci_as: collation que permite a remoção de caracteres como “º” e “ª” por letras equivalentes;
+* sql_latin1_general_cp1251_ci_as: collation em que caracteres acentuados e outros símbolos especiais como cedilha são substituídos por letras convencionais.
+
+Outro ponto a ser destacado é o de que dois collations não podem ser aplicados ao mesmo tempo. Logo, uma primeira instrução que faz uso da cláusula COLLATE é associada à variável @TEXTO_FORMATADO, repetindo-se este processo através da especificação de um segundo COLLATE na sequência.
+
+Uma vez que a função FN_FORMATAR_TEXTO tenha sido criada, a consulta inicial pode ser refeita, de modo que se retirem acentos e outros caracteres especiais da mesma (Listagem 3). Como resultado disto, os símbolos mencionados anteriormente são substituídos por letras, fato este demonstrado na Figura 2.
+
+Listagem 3: Consulta em que se utiliza o mecanismo de COLLATE (via função FN_FORMATAR_TEXTO)
+
+
+SELECT IdFornecedor
+      ,dbo.FN_FORMATAR_TEXTO(RazaoSocial) AS RazaoSocial
+      ,dbo.FN_FORMATAR_TEXTO(Endereco) AS Endereco
+      ,dbo.FN_FORMATAR_TEXTO(Cidade) AS Cidade
+      ,Estado
+FROM TB_FORNECEDOR
+
+Figura 2: Execução de consulta em que o mecanismo de COLLATE foi aplicado
+
+Pode-se concluir, pelo que foi exposto aqui, que o uso de COLLATE contribui para uma maior produtividade na manipulação de strings em uma base SQL Server, já que dispensa os desenvolvedores de criar intrincadas rotinas para tratamento de texto em suas aplicações. Espero que o conteúdo apresentado possa ser útil no seu dia-a-dia.
+
+Fonte: https://www.devmedia.com.br/eliminando-caracteres-especiais-de-strings-no-sql-server-collate/25286
+
+
+
+
+
+
+
+
+
+
+
+
+
