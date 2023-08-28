@@ -1,0 +1,1 @@
+CREATE OR REPLACE PROCEDURE folha_cb.sp_exc_gh_pafer_agenda(   pCD_PAFUN_CONTR IN folha_cb.gh_pafer_agenda.CD_PAFUN_CONTR%TYPE)isbegin   delete from folha_cb.gh_pafer_agenda where CD_PAFUN_CONTR = pCD_PAFUN_CONTR;end ;
